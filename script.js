@@ -8,8 +8,8 @@
 const navbar = document.getElementById("navbar");
 const navLinks = document.querySelectorAll(".nav-link");
 const EMAILJS_PUBLIC_KEY = "28S5WJ0bbwmIS3w-d"; // ← your key
-const EMAILJS_SERVICE_ID = "service_p3ncc26"; // ← your service
-const EMAILJS_TEMPLATE_ID = "template_xrmvh7q"; // ← your template
+const EMAILJS_SERVICE_ID = "service_ixsp23i"; // ← your service
+const EMAILJS_TEMPLATE_ID = "template_c6w77sq"; // ← your template
 
 function updateNavbar() {
   if (window.scrollY > 60) {
