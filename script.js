@@ -122,8 +122,8 @@ contactForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const templateParams = {
-    from_name: document.getElementById("name").value.trim(),
-    from_email: document.getElementById("email").value.trim(),
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
     subject: document.getElementById("subject").value.trim() || "(No subject)",
     message: document.getElementById("message").value.trim(),
   };
@@ -154,7 +154,7 @@ contactForm.addEventListener("submit", async (e) => {
     submitBtn.style.opacity = "1";
     setStatus(
       "❌ Failed to send. Please try again or email me directly.",
-      "#ff6b6b"
+      "#ff6b6b",
     );
     console.error("EmailJS error:", error);
   }
