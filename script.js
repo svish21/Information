@@ -101,33 +101,63 @@ document
 // ─── SKILL BAR ANIMATION ───
 // Triggered when skill blocks become visible (handled by CSS via .visible class + custom property)
 
+// ─── EMAILJS INIT ───
+emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
 // ─── CONTACT FORM ───
 const contactForm = document.getElementById("contactForm");
+const submitBtn = contactForm.querySelector('button[type="submit"]');
 
-contactForm.addEventListener("submit", (e) => {
+const statusMsg = document.createElement("p");
+statusMsg.style.cssText =
+  "margin-top:0.75rem; font-size:0.88rem; text-align:center; font-family:var(--font-display); font-weight:600;";
+contactForm.appendChild(statusMsg);
+
+function setStatus(msg, color) {
+  statusMsg.textContent = msg;
+  statusMsg.style.color = color;
+}
+
+contactForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const btn = contactForm.querySelector('button[type="submit"]');
-  const originalText = btn.textContent;
+  const templateParams = {
+    from_name: document.getElementById("name").value.trim(),
+    from_email: document.getElementById("email").value.trim(),
+    subject: document.getElementById("subject").value.trim() || "(No subject)",
+    message: document.getElementById("message").value.trim(),
+  };
 
-  // Animate button
-  btn.textContent = "Sending...";
-  btn.disabled = true;
-  btn.style.opacity = "0.7";
+  submitBtn.textContent = "Sending...";
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = "0.7";
+  setStatus("", "");
 
-  // Simulate sending (replace with real logic)
-  setTimeout(() => {
-    btn.textContent = "✓ Message Sent!";
-    btn.style.background = "#20c99e";
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+
+    submitBtn.textContent = "✓ Message Sent!";
+    submitBtn.style.background = "#20c99e";
+    setStatus("Thanks! I'll get back to you soon.", "var(--accent)");
+    contactForm.reset();
 
     setTimeout(() => {
-      btn.textContent = originalText;
-      btn.disabled = false;
-      btn.style.opacity = "1";
-      btn.style.background = "";
-      contactForm.reset();
-    }, 3000);
-  }, 1500);
+      submitBtn.textContent = "Send Message ↗";
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = "1";
+      submitBtn.style.background = "";
+      setStatus("", "");
+    }, 4000);
+  } catch (error) {
+    submitBtn.textContent = "Send Message ↗";
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = "1";
+    setStatus(
+      "❌ Failed to send. Please try again or email me directly.",
+      "#ff6b6b"
+    );
+    console.error("EmailJS error:", error);
+  }
 });
 
 // ─── HERO TYPING EFFECT ───
